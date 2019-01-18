@@ -311,11 +311,11 @@
                           v-model="arrayListForPageMock.tableDataOfMockInfoForUpdate.resparams" @blur.prevent="">
                 </el-input>
             </el-form-item>
-            <el-form-item label="描述" prop="description" label-width="100px">
+            <el-form-item label="描   述" prop="description" label-width="100px">
                 <el-input
                         v-model="arrayListForPageMock.tableDataOfMockInfoForUpdate.description"></el-input>
             </el-form-item>
-            <el-form-item label="校验入参" prop="ischeck">
+            <el-form-item label="校验入参" prop="ischeck" label-width="100px" align="left">
 
                 <el-radio-group
                         v-model="arrayListForPageMock.tableDataOfMockInfoForUpdate.ischeck"
@@ -569,10 +569,14 @@
                 var vm = this;
 
                 this.arrayListForPageMock.tableDataOfMockInfoForView = row;
-                vm.$message({
-                    message: '暂不支持发送功能',
-                    type: 'warning'
-                });
+                vm.$notify({
+                            title: vm.resultInfo.resultMsg,
+                            message: '暂不支持发送功能，测试调用地址：http://172.16.156.67:5203+URL',
+                            type: 'success',
+                            position: 'top-right',
+                            offset: 100,
+                            duration: 5000
+                        });
                 this.viewMockScroll()
             },
 
