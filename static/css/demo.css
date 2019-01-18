@@ -5,6 +5,14 @@
     background: url(../images/bg.png);
 }
 
+pre {
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+}
+
 .demos-buttons {
     position: absolute;
     width: 250px;
@@ -39,11 +47,6 @@
 .el-tabs__item {
     font-size: 20px;
 }
-
-
-
-
-
 
 .container {
     padding: 10px;
@@ -91,7 +94,6 @@ h1 {
     margin-top: 10px;
     margin-bottom: 10px;
 }
-
 
 h1 span {
     display: inline-block;
@@ -1075,6 +1077,7 @@ fieldset {
     margin: 0 0 10px 0;
     width: 120%;
 }
+
 legend {
     padding: 2px 5px 2px 5px;
 }

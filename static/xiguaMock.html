@@ -16,12 +16,12 @@
 
 </head>
 <body id='bodyTop'>
-<div id="getintouch"align="center" >
+<div id="getintouch" align="center">
 
 
-    <section class="flipInX animated"   >
+    <section class="flipInX animated">
 
-        <div class="container" style="border-bottom: 0px;margin-bottom: 0px;" >
+        <div class="container" style="border-bottom: 0px;margin-bottom: 0px;">
             <h1>
                 <span>XIGUA-MOCK</span>
             </h1>
@@ -135,18 +135,18 @@
                                     </el-table-column>
 
                                     <el-table-column type="expand" fixed="right">
-                                        <template slot-scope="props">
-                                            <el-form label-position="left" inline class="demo-table-expand">
-                                                <el-form-item label="描述：">
-                                                    <span>{{ props.row.description }}</span>
+                                        <template slot-scope="props" >
+                                            <el-form label-position="right" class="demo-table-expand">
+                                                <el-form-item label="描述：" label-width="100px">
+                                                    <div style="height: 30px;line-height: 30px;">{{ props.row.description }}</div>
                                                 </el-form-item>
-                                                <br/>
-                                                <el-form-item label="请求参数：">
-                                                    <span>{{ props.row.reqparams }}</span>
+                                                <el-form-item label="请求参数：" label-width="100px">
+                                                    <div style="height: 30px;line-height: 30px;">{{ props.row.reqparams }}</div>
                                                 </el-form-item>
-                                                <br/>
-                                                <el-form-item label="预期返回：">
-                                                    <span>{{ props.row.resparams }}</span>
+                                                <el-form-item label="预期返回：" label-width="100px">
+                                                    <div >
+                                                        <pre style="width:90%;margin-top: 5px;  line-height:17px ">{{ props.row.resparams }}</pre>
+                                                    </div>
                                                 </el-form-item>
 
                                             </el-form>
@@ -278,7 +278,7 @@
     <el-dialog title="修改编辑" :visible.sync="flags.dialogFormVisible">
         <el-form :v-model="arrayListForPageMock.tableDataOfMockInfoForUpdate">
             <el-form-item label="连接名称" prop="title" label-width="100px" modal="false"
-                          modal-append-to-body="false">
+                          modal-append-to-body="false" >
                 <el-input v-model="arrayListForPageMock.tableDataOfMockInfoForUpdate.title"
                           auto-complete="off"></el-input>
             </el-form-item>
@@ -335,23 +335,18 @@
     </el-dialog>
 </div>
 <style>
-    .demo-table-expand {
-        font-size: 0;
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+    pre {
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
     }
 
-    .demo-table-expand label {
-        width: 100px;
-        color: #99a9bf;
-    }
-
-    .demo-table-expand .el-form-item {
-        margin-right: 0;
-        margin-left: 30px;
-        margin-bottom: 0;
-        align-items: center;
-        width: 90%;
-
-    }
 </style>
 <script>
     new Vue({
@@ -470,8 +465,9 @@
         },
 
         methods: {
-
-
+            text(props) {
+                return JSON.stringify(props.row.resparams, null, 4).replace(/\\n/g, '</br>').replace(/\\"/g, '"').replace(/\"{/g, '{').replace(/\}"/g, '}')
+            },
             clickTable(row, index, e) {
                 this.$refs.multipleTable.toggleRowExpansion(row)
             },
@@ -570,13 +566,13 @@
 
                 this.arrayListForPageMock.tableDataOfMockInfoForView = row;
                 vm.$notify({
-                            title: vm.resultInfo.resultMsg,
-                            message: '暂不支持发送功能，测试调用地址：http://172.16.156.67:5203+URL',
-                            type: 'success',
-                            position: 'top-right',
-                            offset: 100,
-                            duration: 10000
-                        });
+                    title: vm.resultInfo.resultMsg,
+                    message: '暂不支持发送功能，测试调用地址：http://172.16.156.67:5203+URL',
+                    type: 'success',
+                    position: 'top-right',
+                    offset: 100,
+                    duration: 10000
+                });
                 this.viewMockScroll()
             },
 
@@ -834,7 +830,8 @@
         created() {
             this.getAllList();
             this.getProjectNameList();
-        }
+        },
+        computed: {}
     })
 </script>
 <footer>
