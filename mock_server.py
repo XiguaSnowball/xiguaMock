@@ -14,6 +14,7 @@ relay = 0
 host1 = 'http://172.16.156.67:5202'
 
 
+
 def getconfig():
     cf = configparser.ConfigParser()
     path = 'db.config'
@@ -43,6 +44,21 @@ class mock_config(db.Model):
     ischeck = db.Column(db.Integer)
     project_name = db.Column(db.String(20))
 
+# todo:根据返回值构造随机数，list等
+def randomResult(originalResult):
+    print(originalResult)
+    print(type(originalResult))
+
+    formatResult = ''
+
+    originalResult = json.loads(originalResult)
+
+    for resultKey in originalResult.keys():
+        print(resultKey)
+
+
+
+    return formatResult
 
 def checksize(domain, method):
     # 校验domain是否存在
@@ -102,7 +118,8 @@ def checkparams(domain, varsvalue1):
                     result_json = {"status": "fail", "msg": u"对应请求没有配置预期返回值"}
                     return result_json
                 else:
-                    result_json = {"status": "success", "msg": u"请求成功", "result": mock_data_item.resparams}
+                    formatResult = randomResult(mock_data_item.resparams)
+                    result_json = {"status": "success", "msg": u"请求成功", "result": formatResult}
                     return result_json
 
         if mock_data_item.methods.lower() == 'post':
@@ -114,8 +131,10 @@ def checkparams(domain, varsvalue1):
                     result_json = {"status": "fail", "msg": u"对应请求没有配置预期返回值"}
                     return result_json
                 else:
-                    result_json = {"status": "success", "msg": u"请求成功", "result": mock_data_item.resparams}
+                    formatResult = randomResult(mock_data_item.resparams)
+                    result_json = {"status": "success", "msg": u"请求成功", "result": formatResult}
                     return result_json
+
         continue
     result_json = {"status": "fail", "msg": u"该接口未激活或没有该入参对应的返回值"}
     return result_json
@@ -170,7 +189,6 @@ def get_all_task(path, path1):
         # varsvalue = request.form.items()
 
     r = checkpath(npath, varsvalue, request.method)
-    # print(type(r))
 
     if r['status'] == 'fail' and relay == 0:
         return jsonify(r)
@@ -209,7 +227,6 @@ def get_all_task1(path):
         return jsonify(result)
 
 
-# todo:根据返回值构造随机数，list等
 
 @app.errorhandler(404)
 def not_found(error):
