@@ -166,7 +166,11 @@ def get_all_task(path, path1):
         # varsvalue = request.args.items().__str__()
         # print(varsvalue)
     else:
-        varsvalue = json.loads(request.data)
+        try:
+            varsvalue = json.loads(request.data)
+        except:
+            varsvalue1 = request.args
+            varsvalue = varsvalue1.to_dict()
         # varsvalue = request.form.items()
 
     r = checkpath(npath, varsvalue, request.method)
