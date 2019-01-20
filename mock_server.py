@@ -123,9 +123,8 @@ def randomResult(dic_json):
                         valueRandom = value
 
                 elif isinstance(value, dict):
-                    pass
-                    # randomResult(value)
-
+                    countDic = random.randint(a, b)
+                    valueRandom = dict(random.sample(value.items(), countDic))
 
                 # 随机返回bool类型true或false
                 elif isinstance(value, bool) and (valueRandom_str == 'True' or valueRandom_str == 'False'):

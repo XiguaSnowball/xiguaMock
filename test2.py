@@ -31,9 +31,8 @@ def randomResult(dic_json):
                         valueRandom = value
 
                 elif isinstance(value, dict):
-                    pass
-                    # randomResult(value)
-
+                    countDic = random.randint(a, b)
+                    valueRandom = dict(random.sample(value.items(), countDic))
 
                 # 随机返回bool类型true或false
                 elif isinstance(value, bool) and (valueRandom_str == 'True' or valueRandom_str == 'False'):
@@ -125,15 +124,14 @@ a = """{
 
 b = """
 
-{
-"list|+1":[1,2,3,4,5],
-"data":{"aaat|+2-3":[1,2,3,4,5]
-}
-,
-"ccc|2":[1,2,3,4,5,6],
-"bbb|3-5":[1,2,3,4,5,6,7,8,9],
-"bool|1":true,
-"xount":"341342"
+{"a|2":{"list":1,
+"ccc":2,
+"bbb":3,
+"bool":true,
+"xount":{"dfdfd|1-2":{
+"a":1,"b":2,"c":3,"d":4
+}}}
+
 }
 """
 
