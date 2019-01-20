@@ -1,8 +1,6 @@
 import json
 import random
 
-dic = {}
-
 
 def json_txt(dic_json):
     if isinstance(dic_json, dict):
@@ -17,13 +15,12 @@ def json_txt(dic_json):
 
                 if isinstance(value, str):
                     valueRandom = value * (random.randint(a, b))
-                    pass
 
                 elif isinstance(value, int):
                     valueRandom = random.randint(a, b)
 
                 elif isinstance(value, float):
-                    pass
+                    valueRandom = ("%.2f" % (random.uniform(a, b)))
 
                 elif isinstance(value, list):
                     valueRandom = random.sample(value, count)
@@ -37,23 +34,18 @@ def json_txt(dic_json):
                 elif isinstance(value, bool):
                     pass
 
-                dic[keyAfter] = valueRandom
+                dic_json[keyAfter] = valueRandom
+                del dic_json[key]
 
             else:
-                dic[keyAfter] = value
-
+                dic_json[keyAfter] = value
             json_txt(value)
 
     if isinstance(dic_json, list):
         for i in dic_json:
-            if not isinstance(i, dict) or not isinstance(i, list):
-                break
-            else:
-                json_txt(i)
+            json_txt(i)
 
-
-
-
+    return dic_json
 
 def rangeChack(key):
     mark1 = "|"
@@ -113,14 +105,17 @@ a = """{
 
 b = """{
 "b|1-88":1,
-"data|1-3":{
-    "aaaa":{
-    "b|1-88":1
-    },
-"count|3":"d",
-"list|1-2":[1,2,3,4,5,6]}
-}"""
-a = json.loads(b)
+"data":{
+    "aaaa":[{"eee|1-20":2.11},{"ggg|1-20":1}],"fff|3":"成功","count|3":"d"
+},
+"ccc|1-8":"d"
+}
 
-json_txt(a)
-print("dic ---: " + str(dic))
+
+"""
+
+a = json.loads(b)
+len_3 = len(a)
+
+dic = json_txt(a)
+print(dic)

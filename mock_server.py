@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import random
 from imp import reload
 
 from flask import jsonify, Flask, make_response, request
@@ -45,20 +46,87 @@ class mock_config(db.Model):
     project_name = db.Column(db.String(20))
 
 # todo:根据返回值构造随机数，list等
-def randomResult(originalResult):
-    print(originalResult)
-    print(type(originalResult))
 
-    formatResult = ''
+def rangeChack(key):
+    mark1 = "|"
+    mark2 = "-"
+    rangeOfKeyStart = ""
+    rangeOfKeyEnd = ""
+    keyAfter = key
+    if mark1 in str(key):
+        indexOfMark1 = key.index(mark1)
+        # 总的范围
+        rangeOfKey = key[indexOfMark1 + 1:]
+        keyAfter = key[:indexOfMark1]
+        # print(rangeOfKey)
 
-    originalResult = json.loads(originalResult)
+        # 随机的数量
+        if mark2 in rangeOfKey:
+            indexOfMark2 = rangeOfKey.index(mark2)
+            rangeOfKeyStart = rangeOfKey[0]
+            # print(rangeOfKeyStart)
 
-    for resultKey in originalResult.keys():
-        print(resultKey)
+            rangeOfKeyEnd = rangeOfKey[indexOfMark2 + 1:]
+            # print(rangeOfKeyEnd)
+
+        else:
+            rangeOfKeyStart = rangeOfKey
+            # print(rangeOfKeyStart)
+
+            rangeOfKeyEnd = rangeOfKey
+            # print(rangeOfKeyEnd)
+
+        return keyAfter, int(rangeOfKeyStart), int(rangeOfKeyEnd)
+
+    else:
+        return keyAfter, rangeOfKeyStart, rangeOfKeyEnd
 
 
+def randomResult(dic_json):
+    if isinstance(dic_json, dict):
+        # print("%s:%s" % (key, value))
+        for key, value in dic_json.items():
+            keyAfter, a, b = rangeChack(key)
+            # print(a,b)
+            valueRandom = value
+            if a and b:
+                # 对应value的个数
+                count = random.randint(a, b)
 
-    return formatResult
+                if isinstance(value, str):
+                    valueRandom = value * (random.randint(a, b))
+
+                elif isinstance(value, int):
+                    valueRandom = random.randint(a, b)
+
+                elif isinstance(value, float):
+                    valueRandom = ("%.2f" % (random.uniform(a, b)))
+
+                elif isinstance(value, list):
+                    valueRandom = random.sample(value, count)
+                    pass
+                    # randomResult(value)
+
+                elif isinstance(value, dict):
+                    pass
+                    # randomResult(value)
+
+                elif isinstance(value, bool):
+                    pass
+
+                dic_json[keyAfter] = valueRandom
+                del dic_json[key]
+
+            else:
+                dic_json[keyAfter] = value
+            randomResult(value)
+
+    if isinstance(dic_json, list):
+        for i in dic_json:
+            randomResult(i)
+    return dic_json
+
+
 
 def checksize(domain, method):
     # 校验domain是否存在
@@ -118,7 +186,7 @@ def checkparams(domain, varsvalue1):
                     result_json = {"status": "fail", "msg": u"对应请求没有配置预期返回值"}
                     return result_json
                 else:
-                    formatResult = randomResult(mock_data_item.resparams)
+                    formatResult = randomResult(json.loads(mock_data_item.resparams))
                     result_json = {"status": "success", "msg": u"请求成功", "result": formatResult}
                     return result_json
 
@@ -131,7 +199,8 @@ def checkparams(domain, varsvalue1):
                     result_json = {"status": "fail", "msg": u"对应请求没有配置预期返回值"}
                     return result_json
                 else:
-                    formatResult = randomResult(mock_data_item.resparams)
+
+                    formatResult = randomResult(json.loads(mock_data_item.resparams))
                     result_json = {"status": "success", "msg": u"请求成功", "result": formatResult}
                     return result_json
 
@@ -197,7 +266,7 @@ def get_all_task(path, path1):
         # return re1[0].content
 
     else:
-        result = json.loads(r['result'])
+        result = r['result']
         return jsonify(result)
 
 
