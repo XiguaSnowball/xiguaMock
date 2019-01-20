@@ -46,7 +46,7 @@ class mock_config(db.Model):
 
 
 def rangeChack(key):
-    key = key.replace(' ','')
+    key = key.replace(' ', '')
     mark1 = "|"
     mark2 = "-"
     mark3 = "+"
@@ -107,7 +107,12 @@ def randomResult(dic_json):
                     valueRandom = value * (random.randint(a, b))
 
                 elif isinstance(value, int) and valueRandom_str != 'True' and valueRandom_str != 'False':
-                    valueRandom = random.randint(a, b)
+                    if a and b:
+                        valueRandom = random.randint(a, b)
+                    elif loopCountOfValue:
+                        valueRandom = int(value)*loopCountOfValue
+                    else:
+                        valueRandom = value
 
                 elif isinstance(value, float):
                     valueRandom = ("%.2f" % (random.uniform(a, b)))
@@ -123,8 +128,11 @@ def randomResult(dic_json):
                         valueRandom = value
 
                 elif isinstance(value, dict):
-                    countDic = random.randint(a, b)
-                    valueRandom = dict(random.sample(value.items(), countDic))
+                    if a and b:
+                        countDic = random.randint(a, b)
+                        valueRandom = dict(random.sample(value.items(), countDic))
+                    else:
+                        valueRandom = value
 
                 # 随机返回bool类型true或false
                 elif isinstance(value, bool) and (valueRandom_str == 'True' or valueRandom_str == 'False'):
@@ -143,7 +151,6 @@ def randomResult(dic_json):
             randomResult(i)
 
     return dic_json
-
 
 
 def checksize(domain, method):
