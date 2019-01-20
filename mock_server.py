@@ -15,7 +15,6 @@ relay = 0
 host1 = 'http://172.16.156.67:5202'
 
 
-
 def getconfig():
     cf = configparser.ConfigParser()
     path = 'db.config'
@@ -45,85 +44,105 @@ class mock_config(db.Model):
     ischeck = db.Column(db.Integer)
     project_name = db.Column(db.String(20))
 
-# todo:根据返回值构造随机数，list等
 
 def rangeChack(key):
+    key = key.replace(' ','')
     mark1 = "|"
     mark2 = "-"
+    mark3 = "+"
     rangeOfKeyStart = ""
     rangeOfKeyEnd = ""
+    loopCount = ""
     keyAfter = key
     if mark1 in str(key):
         indexOfMark1 = key.index(mark1)
         # 总的范围
         rangeOfKey = key[indexOfMark1 + 1:]
         keyAfter = key[:indexOfMark1]
-        # print(rangeOfKey)
+
+        # 判断是否为重复输出规则
+        if mark3 in rangeOfKey:
+            indexOfMark3 = rangeOfKey.index(mark3)
+
+            if mark2 in rangeOfKey:
+                indexOfMark2 = rangeOfKey.index(mark2)
+                loopOfKeyStart = rangeOfKey[indexOfMark3 + 1:indexOfMark2]
+                loopOfKeyEnd = rangeOfKey[indexOfMark2 + 1:]
+
+            else:
+                loopOfKeyStart = rangeOfKey[1]
+                loopOfKeyEnd = rangeOfKey[indexOfMark3 + 1:]
+
+            # 重复次数
+            loopCount = random.randint(int(loopOfKeyStart), int(loopOfKeyEnd))
+            return keyAfter, rangeOfKeyStart, rangeOfKeyEnd, loopCount
 
         # 随机的数量
-        if mark2 in rangeOfKey:
+
+        elif mark2 in rangeOfKey:
             indexOfMark2 = rangeOfKey.index(mark2)
             rangeOfKeyStart = rangeOfKey[0]
-            # print(rangeOfKeyStart)
-
             rangeOfKeyEnd = rangeOfKey[indexOfMark2 + 1:]
-            # print(rangeOfKeyEnd)
 
         else:
             rangeOfKeyStart = rangeOfKey
-            # print(rangeOfKeyStart)
-
             rangeOfKeyEnd = rangeOfKey
-            # print(rangeOfKeyEnd)
 
-        return keyAfter, int(rangeOfKeyStart), int(rangeOfKeyEnd)
+        return keyAfter, int(rangeOfKeyStart), int(rangeOfKeyEnd), loopCount
 
     else:
-        return keyAfter, rangeOfKeyStart, rangeOfKeyEnd
+        return keyAfter, rangeOfKeyStart, rangeOfKeyEnd, loopCount
 
 
 def randomResult(dic_json):
     if isinstance(dic_json, dict):
-        # print("%s:%s" % (key, value))
         for key, value in dic_json.items():
-            keyAfter, a, b = rangeChack(key)
-            # print(a,b)
+            keyAfter, a, b, loopCountOfValue = rangeChack(key)
             valueRandom = value
-            if a and b:
-                # 对应value的个数
-                count = random.randint(a, b)
+            valueRandom_str = str(valueRandom)
+
+            if (a and b) or loopCountOfValue:
 
                 if isinstance(value, str):
                     valueRandom = value * (random.randint(a, b))
 
-                elif isinstance(value, int):
+                elif isinstance(value, int) and valueRandom_str != 'True' and valueRandom_str != 'False':
                     valueRandom = random.randint(a, b)
 
                 elif isinstance(value, float):
                     valueRandom = ("%.2f" % (random.uniform(a, b)))
 
                 elif isinstance(value, list):
-                    valueRandom = random.sample(value, count)
-                    pass
-                    # randomResult(value)
+                    if a and b:
+                        # 对应value的个数
+                        count = random.randint(a, b)
+                        valueRandom = random.sample(value, count)
+                    elif loopCountOfValue:
+                        valueRandom = value * loopCountOfValue
+                    else:
+                        valueRandom = value
 
                 elif isinstance(value, dict):
                     pass
                     # randomResult(value)
 
-                elif isinstance(value, bool):
-                    pass
+
+                # 随机返回bool类型true或false
+                elif isinstance(value, bool) and (valueRandom_str == 'True' or valueRandom_str == 'False'):
+                    valueRandom = random.choice([True, False])
 
                 dic_json[keyAfter] = valueRandom
                 del dic_json[key]
 
             else:
                 dic_json[keyAfter] = value
+
             randomResult(value)
 
     if isinstance(dic_json, list):
         for i in dic_json:
             randomResult(i)
+
     return dic_json
 
 
@@ -168,8 +187,6 @@ def checkpath(domain, varsvalue, method):
 
 
 def checkparams(domain, varsvalue1):
-
-
     # 数据库中的预期请求参数
     mock_data = mock_config.query.filter(mock_config.status == 0, mock_config.domain == domain).all()
 
@@ -282,7 +299,6 @@ def get_all_task1(path):
         varsvalue = json.loads(request.data)
         # varsvalue = request.form.items()
 
-
     r = checkpath(path, varsvalue, request.method)
 
     if r['status'] == 'fail' and relay == 0:
@@ -294,7 +310,6 @@ def get_all_task1(path):
     else:
         result = json.loads(r['result'])
         return jsonify(result)
-
 
 
 @app.errorhandler(404)
