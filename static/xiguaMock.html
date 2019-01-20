@@ -198,7 +198,7 @@
                                     </textarea>
                                     </el-form-item>
                                     <el-form-item label="期待返回" prop="resparams">
-                                    <textarea id="resparamsAdd" rows="6" cols="10"
+                                    <textarea id="resparamsAdd" rows="6" cols="20"
                                               v-model="arrayListForPageMock.addMockDataInput.resparams"
                                               @blur.prevent="">
                                     </textarea>
@@ -306,7 +306,7 @@
             <el-form-item label="期待返回" prop="resparams" label-width="100px">
                 <el-input id="resparamsAdd" style="width: 100%; margin: 0px;"
                           type="textarea"
-                          :autosize="{ minRows: 2, maxRows: 10}"
+                          :autosize="{ minRows: 2, maxRows: 20}"
                           placeholder="请输入内容"
                           v-model="arrayListForPageMock.tableDataOfMockInfoForUpdate.resparams" @blur.prevent="">
                 </el-input>
