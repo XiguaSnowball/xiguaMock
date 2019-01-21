@@ -53,12 +53,13 @@
                             <el-button type="primary" size="medium" icon="el-icon-edit" @click="addScroll">
                                 新增
                             </el-button>
-                            <el-button type="danger" size="medium" icon="el-icon-delete"
-                                       @click="deleteMockData(null,0)">删除
+                            <el-button slot="reference" type="danger" size="medium" icon="el-icon-delete"
+                                       @click="open2">删除
                             </el-button>
-                            &nbsp;
+
+
                             <el-popover
-                                    placement="right"
+                                    placement="bottom"
                                     width="360"
                                     trigger="click">
                                 <el-upload
@@ -71,11 +72,20 @@
                                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                                     <div class="el-upload__tip" slot="tip">上传excel文件，且不超过5M</div>
                                 </el-upload>
-
-
                                 <el-button type="success" size="medium" icon="el-icon-upload" slot="reference">导入
                                 </el-button>
                             </el-popover>
+                            &nbsp;
+
+                            <el-popover
+                                    placement="right"
+                                    title="数据模板定义规范"
+                                    width="200"
+                                    trigger="hover"
+                                    :content="rulesContent">
+                                <i style="color: #cdbd39;" class="el-icon-info" slot="reference"></i>
+                            </el-popover>
+
                         </div>
 
                         <div class="form-row-select">
@@ -126,16 +136,19 @@
                                             <el-button type="text" size="small" @click="copyMockData(scope.row.id)"><i
                                                     class="el-icon-document"></i>复制
                                             </el-button>
+
+
                                             <el-button type="text" size="small" style="color: red"
-                                                       @click="deleteMockData(scope.row.id,1)"><i
+                                                       @click="flags.visible2OfRow=true" slot="reference"><i
                                                     class="el-icon-delete" style="color: red"></i>删除
                                             </el-button>
-
                                         </template>
+
                                     </el-table-column>
 
+
                                     <el-table-column type="expand" fixed="right">
-                                        <template slot-scope="props" >
+                                        <template slot-scope="props">
                                             <el-form label-position="right" class="demo-table-expand">
                                                 <el-form-item label="描述：" label-width="100px">
                                                     <div style="height: 30px;line-height: 30px;">{{ props.row.description }}</div>
@@ -144,7 +157,7 @@
                                                     <div style="height: 30px;line-height: 30px;">{{ props.row.reqparams }}</div>
                                                 </el-form-item>
                                                 <el-form-item label="预期返回：" label-width="100px">
-                                                    <div >
+                                                    <div>
                                                         <pre style="width:90%;margin-top: 5px;  line-height:17px ">{{ props.row.resparams }}</pre>
                                                     </div>
                                                 </el-form-item>
@@ -202,6 +215,7 @@
                                               v-model="arrayListForPageMock.addMockDataInput.resparams"
                                               @blur.prevent="">
                                     </textarea>
+
                                     </el-form-item>
                                     <el-form-item label="描述" prop="des">
                                         <el-input v-model="arrayListForPageMock.addMockDataInput.des"></el-input>
@@ -278,7 +292,7 @@
     <el-dialog title="修改编辑" :visible.sync="flags.dialogFormVisible">
         <el-form :v-model="arrayListForPageMock.tableDataOfMockInfoForUpdate">
             <el-form-item label="连接名称" prop="title" label-width="100px" modal="false"
-                          modal-append-to-body="false" >
+                          modal-append-to-body="false">
                 <el-input v-model="arrayListForPageMock.tableDataOfMockInfoForUpdate.title"
                           auto-complete="off"></el-input>
             </el-form-item>
@@ -335,10 +349,11 @@
     </el-dialog>
 </div>
 <style>
-  .demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
-  }
+    .demo-table-expand label {
+        width: 90px;
+        color: #99a9bf;
+    }
+
     pre {
         white-space: pre-wrap;
         white-space: -moz-pre-wrap;
@@ -364,9 +379,12 @@
                 dialogFormVisible: false,
                 addFormVisible: false,
                 uploadShowFlag: false,
-                viewMockVisible: false
+                viewMockVisible: false,
+                visible2: false,
+                visible2OfRow: false,
 
             },
+            rulesContent: "/wiki.md",
 
             urlOfGetAllList: urlsOfWeb.search,
             urlOfProjectNameAllList: urlsOfWeb.searchproject,
@@ -465,6 +483,16 @@
         },
 
         methods: {
+            open2() {
+                this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.deleteMockData(null,0);
+                }).catch(() => {
+                });
+            },
             text(props) {
                 return JSON.stringify(props.row.resparams, null, 4).replace(/\\n/g, '</br>').replace(/\\"/g, '"').replace(/\"{/g, '{').replace(/\}"/g, '}')
             },
@@ -756,6 +784,9 @@
                         });
                         vm.getAllList();
                         vm.getProjectNameList();
+                        vm.flags.visible2 = false;
+                        vm.flags.visible2OfRow = false;
+
                     }
                 }).catch(function (error) {
                     vm.flags.loading = false;
@@ -769,6 +800,8 @@
                 this.arrayListForPageMock.delId = []
                 this.arrayListForPageMock.delIdsInput = []
                 this.arrayListForPageMock.delIds = []
+                this.flags.visible2 = false;
+                this.flags.visible2OfRow = false;
             },
             editMockData() {
                 var vm = this;
@@ -825,6 +858,7 @@
                     vm.getProjectNameList()
                 }
             },
+
 
         },
         created() {
