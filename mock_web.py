@@ -14,7 +14,7 @@ reload(sys)
 
 save_path = '/Users/xingyukun/PycharmProjects/xiguMock/aaa.xlsx'
 ALLOWED_EXTENSIONS = ['xls', 'xlsx']
-app = Flask(__name__, static_url_path='', root_path='/Users/xingyukun/PycharmProjects/xiguaMock/')
+app = Flask(__name__, static_url_path='', root_path='../xiguaMock/')
 
 CORS(app, supports_credentials=True)
 

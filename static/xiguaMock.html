@@ -17,16 +17,12 @@
 </head>
 <body id='bodyTop'>
 <div id="getintouch" align="center">
-
-
     <section class="flipInX animated">
-
         <div class="container" style="border-bottom: 0px;margin-bottom: 0px;">
             <h1>
                 <span>XIGUA-MOCK</span>
             </h1>
         </div>
-
         <div class="container"
              style="margin-top: 0px;padding-top: 0px;padding-bottom: 0px;margin-bottom: 0px;margin-left: 90px;margin-right: 100px;width: 1453px;">
             <form class="contact">
@@ -45,7 +41,6 @@
                                     <span style="float: left">{{ item }}</span>
                                 </el-option>
                             </el-select>
-
                             <el-input v-model="getAllListInput.title" placeholder="请输入搜索名称"
                                       style="width: 200px;" clearable></el-input>
                             <el-button type="primary" size="medium" icon="el-icon-search" @click="getAllList" plain>搜索
@@ -56,7 +51,7 @@
                             <el-button slot="reference" type="danger" size="medium" icon="el-icon-delete"
                                        @click="open2">删除
                             </el-button>
-
+                            &nbsp;
 
                             <el-popover
                                     placement="bottom"
@@ -76,16 +71,7 @@
                                 </el-button>
                             </el-popover>
                             &nbsp;
-
-                            <el-popover
-                                    placement="right"
-                                    title="数据模板定义规范"
-                                    width="200"
-                                    trigger="hover"
-                                    :content="rulesContent">
-                                <i style="color: #cdbd39;" class="el-icon-info" slot="reference"></i>
-                            </el-popover>
-
+                            <el-button type="text" icon="el-icon-info" style="color: #cdbd39;"><a href="wiki.html" style="color: #cdbd39;">数据格式定义规范</a></el-button>
                         </div>
 
                         <div class="form-row-select">
@@ -364,6 +350,7 @@
 
 </style>
 <script>
+
     new Vue({
         el: '#getintouch',
         data: {
@@ -384,8 +371,6 @@
                 visible2OfRow: false,
 
             },
-            rulesContent: "/wiki.md",
-
             urlOfGetAllList: urlsOfWeb.search,
             urlOfProjectNameAllList: urlsOfWeb.searchproject,
             urlOfaddMockData: urlsOfWeb.addinfo,
@@ -489,7 +474,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.deleteMockData(null,0);
+                    this.deleteMockData(null, 0);
                 }).catch(() => {
                 });
             },
@@ -499,7 +484,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.deleteMockData(row.id,1);
+                    this.deleteMockData(row.id, 1);
                 }).catch(() => {
                 });
             },
