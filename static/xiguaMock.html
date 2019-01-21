@@ -139,7 +139,7 @@
 
 
                                             <el-button type="text" size="small" style="color: red"
-                                                       @click="flags.visible2OfRow=true" slot="reference"><i
+                                                       @click="open3(scope.row)" slot="reference"><i
                                                     class="el-icon-delete" style="color: red"></i>删除
                                             </el-button>
                                         </template>
@@ -493,6 +493,17 @@
                 }).catch(() => {
                 });
             },
+            open3(row) {
+                this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.deleteMockData(row.id,1);
+                }).catch(() => {
+                });
+            },
+
             text(props) {
                 return JSON.stringify(props.row.resparams, null, 4).replace(/\\n/g, '</br>').replace(/\\"/g, '"').replace(/\"{/g, '{').replace(/\}"/g, '}')
             },
