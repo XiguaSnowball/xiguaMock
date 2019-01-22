@@ -17,7 +17,7 @@ host1 = 'http://172.16.156.67:5202'
 
 def getconfig():
     cf = configparser.ConfigParser()
-    path = 'db.config'
+    path = 'db.ini'
     cf.read(path)
     _dburi = cf.get("database", "dbhost")
     return _dburi
@@ -104,18 +104,25 @@ def randomResult(dic_json):
             if (a and b) or loopCountOfValue:
 
                 if isinstance(value, str):
-                    valueRandom = value * (random.randint(a, b))
-
+                    if a and b:
+                        valueRandom = value * (random.randint(a, b))
+                    elif loopCountOfValue:
+                        valueRandom = value * loopCountOfValue
+                    else:
+                        valueRandom = value
                 elif isinstance(value, int) and valueRandom_str != 'True' and valueRandom_str != 'False':
                     if a and b:
                         valueRandom = random.randint(a, b)
                     elif loopCountOfValue:
-                        valueRandom = int(value)*loopCountOfValue
+                        valueRandom = int(value) * loopCountOfValue
                     else:
                         valueRandom = value
 
                 elif isinstance(value, float):
-                    valueRandom = ("%.2f" % (random.uniform(a, b)))
+                    if a and b:
+                        valueRandom = ("%.2f" % (random.uniform(a, b)))
+                    else:
+                        valueRandom = value
 
                 elif isinstance(value, list):
                     if a and b:
@@ -160,9 +167,11 @@ def checksize(domain, method):
     mock1 = mock_config.query.filter(mock_config.domain == domain,
                                      mock_config.methods == method).first()
     if not mock:
-        return jsonify({"status": "fail", "msg": u"请求方法不存在"})
+        result_json = {"status": "fail", "msg": u"请求方法不存在"}
+        return result_json
     elif not mock1:
-        return jsonify({"status": "fail", "msg": u"请求方法对应的请求方式不存在"})
+        result_json = {"status": "fail", "msg": u"请求方法对应的请求方式不存在"}
+        return result_json
 
 
 def checkpath(domain, varsvalue, method):
