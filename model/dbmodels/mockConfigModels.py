@@ -1,12 +1,9 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint, Index
-
-from xiguaMock.model.utils.sqlAlUtil import sqlAlUtil
+from model.utils.sqlAlUtil import sqlAlUtil
 
 session = sqlAlUtil.session
 
-import random
 from imp import reload
-from xiguaMock import app
+from setting import app
 import sys
 import configparser
 from flask_sqlalchemy import SQLAlchemy
@@ -15,7 +12,7 @@ reload(sys)
 
 def getconfig():
     cf = configparser.ConfigParser()
-    path = 'xiguaMock/controller/db.ini'
+    path = 'model/dbmodels/db.config'
     cf.read(path)
     _dburi = cf.get("database", "dbhost")
     return _dburi

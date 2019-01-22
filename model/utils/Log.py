@@ -1,16 +1,15 @@
 import os
-from xiguaMock.model.utils import readConfig as readconfig
 import logging
 from datetime import datetime
 import threading
 
-localReadConfig = readconfig.ReadConfig()
+localReadConfig = readConfig.ReadConfig()
 
 
 class Log:
     def __init__(self):
         global logPath, resultPath, proDir
-        proDir = readconfig.proDir
+        proDir = readConfig.proDir
         resultPath = os.path.join(proDir, "result")
         if not os.path.exists(resultPath):
             os.mkdir(resultPath)

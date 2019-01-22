@@ -1,17 +1,14 @@
 # coding=utf-8
 from importlib import reload
-from xiguaMock import app
+from setting import app
 
-from flask import Flask, request, jsonify, make_response, json
+from flask import request, jsonify, make_response, json
 from flask_cors import *
 from flask_restful import reqparse
 from datetime import datetime
 import sys, xlrd
-from xiguaMock.controller import mockServerController
-from flask_sqlalchemy import SQLAlchemy
-from xiguaMock.model.dbmodels.mockConfigModels import mock_config
-from xiguaMock.model.dbmodels.mockConfigModels import db
-
+from model.dbmodels.mockConfigModels import mock_config
+from model.dbmodels.mockConfigModels import db
 
 reload(sys)
 save_path = '/Users/xingyukun/PycharmProjects/xiguMock/aaa.xlsx'

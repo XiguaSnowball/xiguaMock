@@ -1,10 +1,9 @@
 from xml.etree import ElementTree as ElementTree
-from xiguaMock.model.utils import readConfig as readconfig
-from xiguaMock.model.utils.Log import MyLog as mylog
+from model import MyLog as mylog
 import os
 
-localReadConfig = readconfig.ReadConfig()
-proDir = readconfig.proDir
+localReadConfig = readConfig.ReadConfig()
+proDir = readConfig.proDir
 log = mylog.get_log()
 logger = log.get_logger()
 

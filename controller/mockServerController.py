@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 import random
 from imp import reload
-from xiguaMock import app
-from flask import jsonify, Flask, make_response, request
-import sys, requests, json
-import configparser
-from flask_sqlalchemy import SQLAlchemy
-from xiguaMock.model.dbmodels.mockConfigModels import mock_config
-from xiguaMock.model.dbmodels.mockConfigModels import db
+from setting import app
+from flask import jsonify, make_response, request
+import sys, json
+from model.dbmodels.mockConfigModels import mock_config
+from model.dbmodels.mockConfigModels import db
 
 reload(sys)
 

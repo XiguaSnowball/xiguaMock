@@ -1,7 +1,7 @@
 import requests
-import xiguaMock.model.utils.readConfig as readConfig
-from xiguaMock.model.utils.Log import MyLog as Log
-from xiguaMock.model.utils import commonFun
+import model.utils.readConfig as readConfig
+from model import MyLog as Log
+from model.utils import commonFun
 import json
 
 localReadConfig = readConfig.ReadConfig()

@@ -1,5 +1,4 @@
-from xiguaMock import app
-
+from setting import app
 
 @app.route('/')
 def hello_world():
